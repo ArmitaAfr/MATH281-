@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MATH 281 — Real Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Lato:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   THEME TOKENS
+═══════════════════════════════════════════════ */
+:root {
+  --transition: .3s cubic-bezier(.4,0,.2,1);
+}
+
+[data-theme="dark"] {
+  --bg-base:       #0d0f14;
+  --bg-layer:      #13161e;
+  --bg-elevated:   #181c27;
+  --glass-bg:      rgba(255,255,255,.04);
+  --glass-border:  rgba(255,255,255,.09);
+  --glass-hover:   rgba(255,255,255,.07);
+  --glass-open:    rgba(255,255,255,.06);
+  --text-primary:  #e8eaf0;
+  --text-secondary:#9ba3b8;
+  --text-tertiary: #5a637a;
+  --header-bg:     rgba(13,15,20,.85);
+  --divider:       rgba(255,255,255,.07);
+  --scrollbar:     rgba(255,255,255,.08);
+  --search-bg:     rgba(255,255,255,.05);
+  --ch-stripe:     rgba(255,255,255,.025);
+
+  --c-def:    #5b8dee;
+  --c-thm:    #4ec994;
+  --c-prop:   #f0a44a;
+  --c-lem:    #e96060;
+  --c-cor:    #c07af0;
+
+  --bg-def:   rgba(91,141,238,.12);
+  --bg-thm:   rgba(78,201,148,.12);
+  --bg-prop:  rgba(240,164,74,.12);
+  --bg-lem:   rgba(233,96,96,.12);
+  --bg-cor:   rgba(192,122,240,.12);
+
+  --badge-def:  rgba(91,141,238,.2);
+  --badge-thm:  rgba(78,201,148,.2);
+  --badge-prop: rgba(240,164,74,.2);
+  --badge-lem:  rgba(233,96,96,.2);
+  --badge-cor:  rgba(192,122,240,.2);
+
+  --ch1: #5b8dee; --ch2: #4ec994; --ch3: #f0a44a;
+  --ch4: #c07af0; --ch5: #e96060; --ch6: #4dc4e8; --ch7: #8de87a;
+
+  --glow-def:  0 0 20px rgba(91,141,238,.15);
+  --glow-thm:  0 0 20px rgba(78,201,148,.15);
+  --glow-prop: 0 0 20px rgba(240,164,74,.15);
+  --glow-lem:  0 0 20px rgba(233,96,96,.15);
+  --glow-cor:  0 0 20px rgba(192,122,240,.15);
+}
+
+[data-theme="light"] {
+  --bg-base:       #f0f2f8;
+  --bg-layer:      #e8ebf4;
+  --bg-elevated:   #ffffff;
+  --glass-bg:      rgba(255,255,255,.65);
+  --glass-border:  rgba(0,0,0,.1);
+  --glass-hover:   rgba(255,255,255,.85);
+  --glass-open:    rgba(255,255,255,.9);
+  --text-primary:  #1a1e2e;
+  --text-secondary:#4a5070;
+  --text-tertiary: #8892aa;
+  --header-bg:     rgba(240,242,248,.88);
+  --divider:       rgba(0,0,0,.08);
+  --scrollbar:     rgba(0,0,0,.1);
+  --search-bg:     rgba(0,0,0,.05);
+  --ch-stripe:     rgba(0,0,0,.015);
+
+  --c-def:    #2563eb; --c-thm:    #059669; --c-prop:   #d97706;
+  --c-lem:    #dc2626; --c-cor:    #7c3aed;
+
+  --bg-def:   rgba(37,99,235,.08);
+  --bg-thm:   rgba(5,150,105,.08);
+  --bg-prop:  rgba(217,119,6,.08);
+  --bg-lem:   rgba(220,38,38,.08);
+  --bg-cor:   rgba(124,58,237,.08);
+
+  --badge-def:  rgba(37,99,235,.12);
+  --badge-thm:  rgba(5,150,105,.12);
+  --badge-prop: rgba(217,119,6,.12);
+  --badge-lem:  rgba(220,38,38,.12);
+  --badge-cor:  rgba(124,58,237,.12);
+
+  --ch1: #2563eb; --ch2: #059669; --ch3: #d97706;
+  --ch4: #7c3aed; --ch5: #dc2626; --ch6: #0891b2; --ch7: #16a34a;
+
+  --glow-def:  0 4px 20px rgba(37,99,235,.1);
+  --glow-thm:  0 4px 20px rgba(5,150,105,.1);
+  --glow-prop: 0 4px 20px rgba(217,119,6,.1);
+  --glow-lem:  0 4px 20px rgba(220,38,38,.1);
+  --glow-cor:  0 4px 20px rgba(124,58,237,.1);
+}
+
+/* ═══════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 15px; }
+body {
+  font-family: 'Lato', sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+  transition: background var(--transition), color var(--transition);
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════════
+   BACKGROUND DECORATION
+═══════════════════════════════════════════════ */
+.bg-orbs {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+}
+[data-theme="dark"] .bg-orbs::before {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(91,141,238,.06) 0%, transparent 70%);
+  top: -100px; left: -100px;
+  animation: drift1 20s ease-in-out infinite;
+}
+[data-theme="dark"] .bg-orbs::after {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(192,122,240,.05) 0%, transparent 70%);
+  bottom: -50px; right: -50px;
+  animation: drift2 25s ease-in-out infinite;
+}
+[data-theme="light"] .bg-orbs::before,
+[data-theme="light"] .bg-orbs::after { display: none; }
+@keyframes drift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(60px,40px)} }
+@keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-40px,-60px)} }
+
+/* ═══════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════ */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 60px;
+  display: flex; align-items: center; gap: 0;
+  background: var(--header-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--divider);
+  transition: background var(--transition);
+}
+.header-brand {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 1.5rem;
+  border-right: 1px solid var(--divider);
+  height: 100%;
+  flex-shrink: 0;
+}
+.brand-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .75rem;
+  color: var(--text-tertiary);
+  letter-spacing: .06em;
+}
+.brand-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -.01em;
+}
+
+.header-search {
+  flex: 1;
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 1.5rem;
+}
+.search-icon { color: var(--text-tertiary); font-size: .85rem; flex-shrink:0; }
+.search-input {
+  background: transparent;
+  border: none; outline: none;
+  font-family: 'Lato', sans-serif;
+  font-size: .9rem;
+  color: var(--text-primary);
+  width: 100%;
+}
+.search-input::placeholder { color: var(--text-tertiary); }
+
+.header-right {
+  display: flex; align-items: center; gap: 4px;
+  padding: 0 1rem;
+  border-left: 1px solid var(--divider);
+  height: 100%;
+}
+.count-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .7rem;
+  color: var(--text-tertiary);
+  padding: 3px 8px;
+  background: var(--search-bg);
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.theme-btn {
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  transition: all .2s;
+  margin-left: 4px;
+}
+.theme-btn:hover { background: var(--glass-hover); color: var(--text-primary); }
+
+/* ═══════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════ */
+.layout {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+  min-height: 100vh;
+  padding-top: 60px;
+  position: relative; z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════
+   SIDEBAR
+═══════════════════════════════════════════════ */
+.sidebar {
+  position: sticky;
+  top: 60px;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  padding: 1.5rem 0 2rem;
+  border-right: 1px solid var(--divider);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 2px; }
+
+.sidebar-section { margin-bottom: 1.75rem; }
+.sidebar-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6rem;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--text-tertiary);
+  padding: 0 1.25rem;
+  margin-bottom: .6rem;
+}
+.sidebar-ch-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: .5rem 1.25rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: .85rem;
+  transition: all .15s;
+  border-left: 2px solid transparent;
+  text-decoration: none;
+}
+.sidebar-ch-item:hover { background: var(--glass-hover); color: var(--text-primary); }
+.sidebar-ch-item.active { color: var(--text-primary); border-left-color: var(--text-primary); font-weight: 700; }
+.ch-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  flex-shrink: 0; transition: transform .15s;
+}
+.sidebar-ch-item.active .ch-dot { transform: scale(1.4); }
+
+.sidebar-divider { height: 1px; background: var(--divider); margin: .5rem 1.25rem 1rem; }
+
+.type-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: .4rem 1.25rem;
+  cursor: pointer;
+  font-size: .82rem;
+  color: var(--text-secondary);
+  transition: all .15s;
+  border-radius: 0;
+}
+.type-pill:hover { background: var(--glass-hover); color: var(--text-primary); }
+.type-pill.active { font-weight: 700; color: var(--text-primary); }
+.type-swatch {
+  width: 7px; height: 7px; border-radius: 2px; flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   MAIN
+═══════════════════════════════════════════════ */
+.main { padding: 0; overflow: hidden; }
+
+/* ═══════════════════════════════════════════════
+   CHAPTER BLOCK
+═══════════════════════════════════════════════ */
+.chapter-block { position: relative; }
+.chapter-block.all-hidden { display: none; }
+
+.chapter-banner {
+  display: flex; align-items: center; gap: 16px;
+  padding: 2.5rem 2.5rem 1.25rem;
+  position: sticky;
+  top: 60px;
+  z-index: 50;
+  background: var(--bg-base);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--divider);
+  transition: background var(--transition);
+}
+.ch-accent-line {
+  width: 4px; height: 38px; border-radius: 2px; flex-shrink: 0;
+}
+.ch-banner-text {}
+.ch-banner-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .62rem;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--text-tertiary);
+  margin-bottom: 2px;
+}
+.ch-banner-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--text-primary);
+}
+.ch-banner-count {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .7rem;
+  color: var(--text-tertiary);
+}
+
+/* ═══════════════════════════════════════════════
+   CARDS GRID
+═══════════════════════════════════════════════ */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 12px;
+  padding: 1.5rem 2rem 2.5rem;
+}
+
+/* ═══════════════════════════════════════════════
+   GLASS CARD
+═══════════════════════════════════════════════ */
+.card {
+  position: relative;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  cursor: pointer;
+  transition: background .2s, border-color .2s, box-shadow .2s, transform .15s;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: cardIn .35s ease both;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  border-radius: 14px 14px 0 0;
+  opacity: 0;
+  transition: opacity .2s;
+}
+.card:hover { background: var(--glass-hover); transform: translateY(-2px); }
+.card:hover::before { opacity: 1; }
+.card.open {
+  background: var(--glass-open);
+  border-color: var(--glass-border);
+}
+.card.open::before { opacity: 1; }
+.card.hidden { display: none; }
+
+.t-def::before  { background: linear-gradient(90deg, var(--c-def), transparent); }
+.t-thm::before  { background: linear-gradient(90deg, var(--c-thm), transparent); }
+.t-prop::before { background: linear-gradient(90deg, var(--c-prop), transparent); }
+.t-lem::before  { background: linear-gradient(90deg, var(--c-lem), transparent); }
+.t-cor::before  { background: linear-gradient(90deg, var(--c-cor), transparent); }
+
+.t-def:hover, .t-def.open  { box-shadow: var(--glow-def); border-color: rgba(91,141,238,.25); }
+.t-thm:hover, .t-thm.open  { box-shadow: var(--glow-thm); border-color: rgba(78,201,148,.25); }
+.t-prop:hover,.t-prop.open { box-shadow: var(--glow-prop); border-color: rgba(240,164,74,.25); }
+.t-lem:hover, .t-lem.open  { box-shadow: var(--glow-lem); border-color: rgba(233,96,96,.25); }
+.t-cor:hover, .t-cor.open  { box-shadow: var(--glow-cor); border-color: rgba(192,122,240,.25); }
+
+[data-theme="light"] .t-def:hover, [data-theme="light"] .t-def.open  { border-color: rgba(37,99,235,.3); }
+[data-theme="light"] .t-thm:hover, [data-theme="light"] .t-thm.open  { border-color: rgba(5,150,105,.3); }
+[data-theme="light"] .t-prop:hover,[data-theme="light"] .t-prop.open { border-color: rgba(217,119,6,.3); }
+[data-theme="light"] .t-lem:hover, [data-theme="light"] .t-lem.open  { border-color: rgba(220,38,38,.3); }
+[data-theme="light"] .t-cor:hover, [data-theme="light"] .t-cor.open  { border-color: rgba(124,58,237,.3); }
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* card internals */
+.card-top {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+  margin-bottom: 6px;
+}
+.card-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.card-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .58rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  padding: 2px 7px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.t-def  .card-badge { background: var(--badge-def);  color: var(--c-def);  }
+.t-thm  .card-badge { background: var(--badge-thm);  color: var(--c-thm);  }
+.t-prop .card-badge { background: var(--badge-prop); color: var(--c-prop); }
+.t-lem  .card-badge { background: var(--badge-lem);  color: var(--c-lem);  }
+.t-cor  .card-badge { background: var(--badge-cor);  color: var(--c-cor);  }
+
+.card-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .68rem;
+  color: var(--text-tertiary);
+}
+.card-chevron {
+  color: var(--text-tertiary);
+  font-size: .7rem;
+  flex-shrink: 0;
+  transition: transform .25s cubic-bezier(.4,0,.2,1), color .15s;
+  margin-top: 1px;
+}
+.card.open .card-chevron { transform: rotate(180deg); color: var(--text-secondary); }
+
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+  margin-bottom: 4px;
+  letter-spacing: -.01em;
+}
+.card-preview {
+  font-size: .8rem;
+  color: var(--text-tertiary);
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card.open .card-preview { display: none; }
+
+/* expanded body */
+.card-body {
+  display: none;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--divider);
+}
+.card.open .card-body { display: block; }
+.card-stmt {
+  font-size: .84rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 6px;
+}
+.card-stmt b { color: var(--text-primary); font-weight: 700; }
+.card-diagram {
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--bg-layer);
+  border-radius: 10px;
+  border: 1px solid var(--divider);
+}
+.card-diagram svg { max-width: 100%; display: block; }
+
+/* ═══════════════════════════════════════════════
+   EMPTY STATE
+═══════════════════════════════════════════════ */
+.empty {
+  display: none;
+  padding: 5rem 2.5rem;
+  text-align: center;
+}
+.empty.show { display: block; }
+.empty-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: .5rem;
+}
+.empty p { color: var(--text-tertiary); }
+
+/* ═══════════════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 3px; }
+
+/* ═══════════════════════════════════════════════
+   MOBILE
+═══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .cards-grid { padding: 1rem; gap: 8px; grid-template-columns: 1fr; }
+  .chapter-banner { padding: 1.5rem 1rem .75rem; }
+  .header-brand .brand-title { font-size: .88rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-orbs"></div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-brand">
+    <span class="brand-code">MATH 281</span>
+    <span class="brand-title">Real Analysis</span>
+  </div>
+  <div class="header-search">
+    <span class="search-icon">⌕</span>
+    <input class="search-input" id="search" type="text" placeholder="Search theorems, definitions…" autocomplete="off" spellcheck="false">
+  </div>
+  <div class="header-right">
+    <span class="count-badge" id="result-count">60 results</span>
+    <button class="theme-btn" id="theme-btn" title="Toggle theme">☀</button>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Chapters</div>
+      <a class="sidebar-ch-item active" id="nav-ch1" href="#ch1">
+        <span class="ch-dot" style="background:var(--ch1)"></span>Ch 1 · The Real Numbers
+      </a>
+      <a class="sidebar-ch-item" id="nav-ch2" href="#ch2">
+        <span class="ch-dot" style="background:var(--ch2)"></span>Ch 2 · Sequences in ℝ
+      </a>
+      <a class="sidebar-ch-item" id="nav-ch3" href="#ch3">
+        <span class="ch-dot" style="background:var(--ch3)"></span>Ch 3 · Sequences in ℝᵈ
+      </a>
+      <a class="sidebar-ch-item" id="nav-ch4" href="#ch4">
+        <span class="ch-dot" style="background:var(--ch4)"></span>Ch 4 · Topology in ℝᵈ
+      </a>
+      <a class="sidebar-ch-item" id="nav-ch5" href="#ch5">
+        <span class="ch-dot" style="background:var(--ch5)"></span>Ch 5 · Infinite Series
+      </a>
+      <a class="sidebar-ch-item" id="nav-ch6" href="#ch6">
+        <span class="ch-dot" style="background:var(--ch6)"></span>Ch 6 · Sequences of Functions
+      </a>
+      <a class="sidebar-ch-item" id="nav-ch7" href="#ch7">
+        <span class="ch-dot" style="background:var(--ch7)"></span>Ch 7 · Power Series
+      </a>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Filter type</div>
+      <div class="type-pill active" data-f="all" onclick="setType('all',this)">
+        <span class="type-swatch" style="background:var(--text-tertiary)"></span>All types
+      </div>
+      <div class="type-pill" data-f="def" onclick="setType('def',this)">
+        <span class="type-swatch" style="background:var(--c-def)"></span>Definitions
+      </div>
+      <div class="type-pill" data-f="thm" onclick="setType('thm',this)">
+        <span class="type-swatch" style="background:var(--c-thm)"></span>Theorems
+      </div>
+      <div class="type-pill" data-f="prop" onclick="setType('prop',this)">
+        <span class="type-swatch" style="background:var(--c-prop)"></span>Propositions
+      </div>
+      <div class="type-pill" data-f="lem" onclick="setType('lem',this)">
+        <span class="type-swatch" style="background:var(--c-lem)"></span>Lemmas
+      </div>
+      <div class="type-pill" data-f="cor" onclick="setType('cor',this)">
+        <span class="type-swatch" style="background:var(--c-cor)"></span>Corollaries
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="main">
+    <div class="empty" id="empty">
+      <div class="empty-title">No results</div>
+      <p>Try a different search or filter.</p>
+    </div>
+  </main>
+</div>
+
+<script>
+const chapters = [
+{id:'ch1',label:'Chapter 1',name:'The Real Numbers',items:[
+  {n:'1.1',t:'def',title:'Bounds in ℚ',preview:'Bounded, lower/upper bound, GLB, LUB for A ⊆ ℚ.',
+   stmt:'Let A ⊆ ℚ. (i) A is <b>bounded</b> if ∃M ∈ ℚ: |q| ≤ M for all q ∈ A. (ii) A <b>lower bound</b> is ℓ ∈ ℚ with ℓ ≤ q for all q ∈ A. (iii) An <b>upper bound</b> is u ∈ ℚ with q ≤ u for all q ∈ A. (iv) ℓ ∈ ℚ is a <b>greatest lower bound</b> if ℓ′ ≤ ℓ for every lower bound ℓ′. (v) u ∈ ℚ is a <b>least upper bound</b> if u ≤ u′ for every upper bound u′.', diag:'bounds'},
+  {n:'1.4',t:'def',title:'Cauchy & convergence in ℚ',preview:'Cauchy sequence and convergence for (qₙ) in ℚ.',
+   stmt:'Let (qₙ) be a sequence in ℚ. (i) (qₙ) is a <b>Cauchy sequence</b> if ∀ε ∈ ℚ&gt;0 ∃N ∈ ℤ&gt;0: |qₙ − qₘ| &lt; ε for m,n ≥ N. (ii) (qₙ) <b>converges</b> to L ∈ ℚ if ∀ε ∈ ℚ&gt;0 ∃N ∈ ℤ&gt;0: |qₙ − L| &lt; ε for n ≥ N.'},
+  {n:'1.1',t:'lem',title:'Integer classification lemma',preview:'Every pair (j,k) satisfies exactly one of three cases.',
+   stmt:'If (j,k) is a pair of nonneg. integers, then exactly one holds: (i) (j,k) ~ (m,0) for unique m ∈ ℤ&gt;0; (ii) (j,k) ~ (0,m) for unique m ∈ ℤ&gt;0; (iii) (j,k) ~ (0,0).'},
+  {n:'1.7',t:'def',title:'Bounded subsets of ℝ',preview:'Bounded below, above, bounded, unbounded.',
+   stmt:'A ⊆ ℝ is <b>bounded below</b> if ∃s: s ≤ a for all a ∈ A (any such s is a lower bound). <b>Bounded above</b> if ∃t: a ≤ t for all a ∈ A. <b>Bounded</b> if both; <b>unbounded</b> otherwise.', diag:'number_line'},
+  {n:'1.9',t:'thm',title:'Least upper bound property',preview:'Every nonempty bounded-above subset of ℝ has a supremum.',
+   stmt:'Every nonempty subset of ℝ that is bounded above has a least upper bound (supremum). Every nonempty subset bounded below has a greatest lower bound (infimum).', diag:'lub'},
+  {n:'1.10',t:'def',title:'Supremum and infimum',preview:'sup A = smallest upper bound; inf A = largest lower bound.',
+   stmt:'If A ⊆ ℝ is nonempty: (i) If A bounded above, the smallest upper bound is the <b>supremum</b>, written sup A. (ii) If A bounded below, the largest lower bound is the <b>infimum</b>, written inf A.'},
+  {n:'1.11',t:'prop',title:'Monotonicity of sup',preview:'A ⊆ B (bounded above) ⟹ sup A ≤ sup B.',
+   stmt:'If A and B are nonempty subsets of ℝ both bounded above, and A ⊆ B, then sup A ≤ sup B.'},
+  {n:'1.12',t:'thm',title:'Characterisation of supremum',preview:'s = sup A ⟺ two ε-conditions.',
+   stmt:'Let A ⊆ ℝ bounded above, s ∈ ℝ an upper bound. Then s = sup A if and only if: (i) a ≤ s for all a ∈ A, and (ii) A ∩ (s−ε, s] ≠ ∅ for all ε > 0.', diag:'sup_char'},
+  {n:'1.13',t:'cor',title:'Supremum attained or approached',preview:'s = sup A ⟹ either s ∈ A, or s is a limit point.',
+   stmt:'If A ⊆ ℝ bounded above and s = sup A, then either s ∈ A, or A ∩ (s−ε, s) ≠ ∅ for every ε > 0.'},
+]},
+{id:'ch2',label:'Chapter 2',name:'Sequences in ℝ',items:[
+  {n:'2.1',t:'def',title:'Sequence',preview:'A function a: ℤ₊ → ℝ, written (aₙ).',
+   stmt:'A <b>sequence</b> (of real numbers) is a function from ℤ&gt;0 to ℝ. We write aₙ for a(n), call aₙ the n-th term, and denote the sequence (aₙ) or (aₙ)ₙ∈ℤ&gt;0.'},
+  {n:'2.3',t:'def',title:'Bounded sequence',preview:'∃M > 0: |aₙ| ≤ M for all n.',
+   stmt:'A sequence (aₙ) is <b>bounded</b> if ∃M > 0: |aₙ| ≤ M for all n.'},
+  {n:'2.4',t:'def',title:'Limit of a sequence',preview:'lim aₙ = L: ∀ε>0 ∃N: n≥N ⟹ |aₙ−L|<ε.',
+   stmt:'(aₙ) has <b>limit</b> L if ∀ε > 0 ∃N: |aₙ − L| &lt; ε for all n ≥ N. Then (aₙ) is <b>convergent</b> and <b>converges to</b> L; write lim<sub>n→∞</sub> aₙ = L. Otherwise <b>diverges</b>. If ∀c > 0 ∃N: aₙ > c for n ≥ N, write lim aₙ = ∞ (and −∞ similarly).', diag:'epsilon_n'},
+  {n:'2.6',t:'prop',title:'Convergent ⟹ bounded',preview:'Convergence implies boundedness. Converse fails.',
+   stmt:'Every convergent sequence is bounded. The converse fails: (−1)ⁿ is bounded but diverges.', diag:'conv_bdd'},
+  {n:'2.7',t:'def',title:'Monotone sequences',preview:'Nondecreasing, strictly increasing, nonincreasing, …',
+   stmt:'(aₙ) is <b>nondecreasing</b> if aₘ ≤ aₙ when m &lt; n; <b>strictly increasing</b> if aₘ &lt; aₙ; <b>nonincreasing</b> if aₘ ≥ aₙ; <b>strictly decreasing</b> if aₘ > aₙ. <b>Monotone</b> = nondecreasing or nonincreasing.'},
+  {n:'2.9',t:'thm',title:'Bounded monotone sequences converge',preview:'Every bounded monotone sequence is convergent.',
+   stmt:'Every bounded monotone sequence converges. More precisely, if (aₙ) is bounded and nondecreasing: lim aₙ = sup{aₙ | n ∈ ℤ&gt;0}.', diag:'mono'},
+  {n:'2.10',t:'def',title:'Subsequence',preview:'(aₙₖ) where (nₖ) is strictly increasing.',
+   stmt:'If (aₙ) is a sequence and (nₖ) is strictly increasing in ℤ&gt;0, then (aₙₖ) is a <b>subsequence</b> of (aₙ).'},
+  {n:'2.12',t:'lem',title:'Subsequences inherit the limit',preview:'lim aₙ = L ⟹ every subsequence → L.',
+   stmt:'If (aₙₖ) is a subsequence of (aₙ) and lim aₙ = L, then lim<sub>k→∞</sub> aₙₖ = L.'},
+  {n:'2.13',t:'thm',title:'Bolzano–Weierstrass',preview:'Every bounded sequence has a convergent subsequence.',
+   stmt:'Every bounded sequence of real numbers has a convergent subsequence.', diag:'bw'},
+  {n:'2.15',t:'lem',title:'Subsequential limits lemma',preview:'sup T and inf T are themselves subsequential limits.',
+   stmt:'Let T = set of limits of convergent subsequences of (aₙ). If T ≠ ∅ then sup T ∈ T and inf T ∈ T (when finite). If T = ∅ then (aₙ) has a subsequence diverging to ∞ or all subsequences diverge to −∞.'},
+  {n:'2.16',t:'def',title:'limsup and liminf',preview:'Largest / smallest subsequential limits.',
+   stmt:'Let T = {limits of convergent subsequences}. limsup = ∞ if (aₙ) unbounded above; = max T if T ≠ ∅; = −∞ if T = ∅. liminf defined dually.', diag:'limsup_diag'},
+  {n:'2.17',t:'prop',title:'limsup = liminf ⟺ limit exists',preview:'lim aₙ exists iff limsup = liminf.',
+   stmt:'(i) If (aₙ) converges or diverges to ±∞: liminf = lim = limsup. (ii) If liminf = limsup, then (aₙ) converges or diverges to ±∞ and the equality holds.'},
+  {n:'2.19',t:'prop',title:'Characterisation of limsup',preview:'L = limsup iff two ε-frequency conditions.',
+   stmt:'L = limsup<sub>n→∞</sub> aₙ iff (a) aₙ > L+ε for only finitely many n, and (b) aₙ > L−ε for infinitely many n.'},
+  {n:'2.20',t:'prop',title:'limsup as running supremum',preview:'limsup aₙ = lim sup{aₖ : k ≥ n}.',
+   stmt:'For any bounded sequence: limsup aₙ = lim<sub>n→∞</sub> sup{aₖ | k ≥ n} and liminf aₙ = lim<sub>n→∞</sub> inf{aₖ | k ≥ n}.'},
+  {n:'2.22',t:'def',title:'Cauchy sequence in ℝ',preview:'∀ε>0 ∃N: m,n≥N ⟹ |aₙ−aₘ| < ε.',
+   stmt:'(aₙ) is a <b>Cauchy sequence</b> if ∀ε > 0 ∃N ∈ ℤ: |aₙ − aₘ| &lt; ε for all n, m ≥ N.'},
+  {n:'2.23',t:'thm',title:'Completeness of ℝ',preview:'Convergent ⟺ Cauchy. (ℝ is complete; ℚ is not.)',
+   stmt:'A sequence of real numbers is convergent if and only if it is a Cauchy sequence. (This property is called <b>completeness</b> of ℝ. It fails for ℚ.)', diag:'cauchy_diag'},
+]},
+{id:'ch3',label:'Chapter 3',name:'Sequences in ℝᵈ',items:[
+  {n:'3.1',t:'def',title:'Limit in ℝᵈ',preview:'‖xₙ − L‖ < ε for all n ≥ N.',
+   stmt:'(xₙ) in ℝᵈ has <b>limit</b> L if ∀ε > 0 ∃N: ‖xₙ − L‖ &lt; ε for n ≥ N. Write lim xₙ = L.'},
+  {n:'3.2',t:'thm',title:'Component-wise convergence',preview:'xₙ → L in ℝᵈ ⟺ each coordinate converges.',
+   stmt:'xₙ → L in ℝᵈ if and only if xₙ,ᵢ → Lᵢ for each i ∈ {1,…,d}. Convergence in ℝᵈ reduces to d separate problems in ℝ.', diag:'componentwise'},
+  {n:'3.3',t:'def',title:'Bounded sequence in ℝᵈ',preview:'∃M > 0: ‖xₙ‖ ≤ M for all n.',
+   stmt:'(xₙ) in ℝᵈ is <b>bounded</b> if ∃M > 0: ‖xₙ‖ ≤ M for all n ∈ ℤ&gt;0.'},
+  {n:'3.4',t:'thm',title:'Bolzano–Weierstrass in ℝᵈ',preview:'Every bounded sequence in ℝᵈ has a convergent subsequence.',
+   stmt:'Every bounded sequence in ℝᵈ has a convergent subsequence. Proved by applying the ℝ version d times on coordinates.'},
+  {n:'3.5',t:'thm',title:'Contraction mapping theorem',preview:'A contraction on ℝᵈ has a unique fixed point.',
+   stmt:'A contraction on ℝᵈ (a map T with ‖T(x)−T(y)‖ ≤ K‖x−y‖, K &lt; 1) is continuous and has a unique fixed point x* = T(x*).', diag:'contraction'},
+]},
+{id:'ch4',label:'Chapter 4',name:'Topology in ℝᵈ',items:[
+  {n:'4.1',t:'def',title:'Complement',preview:'Ã = ℝᵈ \\ A.',
+   stmt:'For A ⊆ ℝᵈ, the <b>complement</b> is Ã = ℝᵈ \\ A = {x ∈ ℝᵈ | x ∉ A}. Note: A ⊆ B ⟺ B̃ ⊆ Ã.'},
+  {n:'4.2',t:'def',title:'Open and closed sets',preview:'Open: every point has a ball inside. Closed: complement is open.',
+   stmt:'A ⊆ ℝᵈ is <b>open</b> if ∀x ∈ A ∃r > 0: Bᵣ(x) ⊆ A. It is <b>closed</b> if Ã is open.', diag:'open_closed'},
+  {n:'4.3',t:'def',title:'Interior',preview:'int(A) = set of interior points of A.',
+   stmt:'x ∈ ℝᵈ is an <b>interior point</b> of A ⊆ ℝᵈ if ∃r > 0: Bᵣ(x) ⊆ A. int(A) = set of all interior points = the <b>interior</b> of A.'},
+  {n:'4.4',t:'prop',title:'Open ⟺ equals its interior',preview:'A open ⟺ int(A) = A.',
+   stmt:'A is open if and only if every point of A is an interior point, equivalently A = int(A).'},
+  {n:'4.6',t:'prop',title:'Unions and intersections',preview:'Arbitrary ∪ of open = open; finite ∩ of open = open.',
+   stmt:'(i) Arbitrary union of open sets is open. (ii) Finite intersection of open sets is open. (iii) Finite union of closed sets is closed. (iv) Arbitrary intersection of closed sets is closed.', diag:'unions'},
+  {n:'4.8',t:'thm',title:'Bolzano–Weierstrass for sets',preview:'Bounded infinite set ⟹ accumulation point exists.',
+   stmt:'If A ⊆ ℝᵈ is bounded and infinite, ∃x ∈ ℝᵈ: A ∩ Bᵣ(x) is infinite for all r > 0.'},
+  {n:'4.9',t:'def',title:'Cluster point',preview:'x ∈ der(A): every punctured ball meets A.',
+   stmt:'x ∈ ℝᵈ is a <b>cluster point</b> of A if A ∩ B̂ᵣ(x) ≠ ∅ for all r > 0 (punctured ball). der(A) = set of cluster points = <b>derived set</b>.'},
+  {n:'4.11',t:'def',title:'Sequence in a set',preview:'A sequence whose terms all lie in A.',
+   stmt:'A <b>sequence in A</b> is a sequence all of whose terms belong to A.'},
+  {n:'4.12',t:'prop',title:'3 equivalent conditions for cluster point',preview:'Cluster ⟺ A ∩ Bᵣ infinite ⟺ injective sequence → x.',
+   stmt:'x is a cluster point of A iff: (i) A ∩ Bᵣ(x) is infinite for all r > 0, iff (ii) ∃ sequence (xₙ) in A with all terms distinct and lim xₙ = x.'},
+  {n:'4.13',t:'def',title:'Limit point and closure',preview:'cl(A) = set of limit points of A.',
+   stmt:'x is a <b>limit point</b> of A if A ∩ Bᵣ(x) ≠ ∅ for all r > 0. cl(A) = set of limit points = the <b>closure</b> of A.'},
+  {n:'4.15',t:'prop',title:'Characterisation of limit points',preview:'x is a limit point ⟺ ∃ sequence in A → x.',
+   stmt:'x is a limit point of A if and only if there is a sequence (xₙ) in A such that lim xₙ = x.'},
+  {n:'4.16',t:'def',title:'Isolated point',preview:'∃r > 0: A ∩ Bᵣ(x) = {x}.',
+   stmt:'x ∈ A is an <b>isolated point</b> of A if ∃r > 0: A ∩ Bᵣ(x) = {x}.'},
+  {n:'4.17',t:'prop',title:'Cluster ⟺ limit but not isolated',preview:'Limit point x is a cluster point iff x is not isolated.',
+   stmt:'A limit point x ∈ ℝᵈ of A is a cluster point of A if and only if it is not an isolated point of A.'},
+  {n:'4.18',t:'def',title:'Boundary point',preview:'Every ball meets both A and Ã.',
+   stmt:'x is a <b>boundary point</b> of A if ∀r > 0 Bᵣ(x) meets both A and Ã. bd(A) = set of boundary points.'},
+  {n:'4.19',t:'prop',title:'cl(A) = A ∪ bd(A)',preview:'Closure equals set union with its boundary.',
+   stmt:'For any A ⊆ ℝᵈ: cl(A) = A ∪ bd(A).'},
+  {n:'4.20',t:'thm',title:'5 characterisations of closed',preview:'Closed ⟺ der(A)⊆A ⟺ bd(A)⊆A ⟺ cl(A)⊆A ⟺ seq.',
+   stmt:'The following are equivalent for A ⊆ ℝᵈ: (i) A is closed; (ii) der(A) ⊆ A; (iii) bd(A) ⊆ A; (iv) cl(A) ⊆ A; (v) every convergent sequence in A has its limit in A.', diag:'closed5'},
+  {n:'4.21',t:'thm',title:'Compact ⟺ sequential compactness',preview:'Closed & bounded ⟺ every sequence has conv. subseq. in A.',
+   stmt:'A ⊆ ℝᵈ is closed and bounded if and only if every sequence in A has a subsequence converging to a point in A.'},
+  {n:'4.22',t:'def',title:'Compact set',preview:'K ⊆ ℝᵈ is compact if closed and bounded.',
+   stmt:'K ⊆ ℝᵈ is <b>compact</b> if it is closed and bounded. Equivalent: every sequence in K has a convergent subsequence whose limit lies in K.', diag:'compact_diag'},
+  {n:'4.23',t:'thm',title:'ε-δ ⟺ sequential continuity',preview:'f cts at a ⟺ sequential characterisation.',
+   stmt:'For f: A → ℝ and a ∈ A, the following are equivalent: (i) ∀ε>0 ∃δ>0: |f(x)−f(a)| &lt; ε for x ∈ A ∩ Bδ(a); (ii) if aₙ → a in A then f(aₙ) → f(a).'},
+  {n:'4.24',t:'thm',title:'Continuous image of compact is compact',preview:'f cts, K compact ⟹ f(K) compact; f attains min and max.',
+   stmt:'If K ⊆ ℝᵈ compact and f: K → ℝᵐ continuous: (i) f(K) is compact in ℝᵐ. (ii) If m=1, f attains its minimum and maximum on K.', diag:'evt'},
+  {n:'4.25',t:'def',title:'Open cover and finite subcover',preview:'Open covering, finite subcover.',
+   stmt:'A collection 𝒰 of subsets of ℝᵈ is an <b>open covering</b> of A if each U ∈ 𝒰 is open and A ⊆ ∪𝒰. It has a <b>finite subcover</b> if finitely many U₁,…,Uₙ ∈ 𝒰 cover A.'},
+  {n:'4.27',t:'thm',title:'Heine–Borel theorem',preview:'Closed+bounded ⟺ seq. compactness ⟺ Heine–Borel.',
+   stmt:'For A ⊆ ℝᵈ, the following three conditions are equivalent: (i) A closed and bounded; (ii) every sequence in A has a convergent subsequence in A; (iii) every open covering of A has a finite subcover.', diag:'heine_borel'},
+  {n:'4.29',t:'def',title:'Uniform continuity',preview:'δ works globally (independent of x).',
+   stmt:'f: A → ℝ is <b>uniformly continuous</b> if ∀ε>0 ∃δ>0: ‖x−y‖ &lt; δ ⟹ |f(x)−f(y)| &lt; ε for all x,y ∈ A. Key: δ is independent of where you are in A.', diag:'unif'},
+  {n:'4.30',t:'thm',title:'Heine–Cantor theorem',preview:'On compact domains, continuous = uniformly continuous.',
+   stmt:'If K ⊆ ℝᵈ is compact, then f: K → ℝ is continuous if and only if f is uniformly continuous.'},
+  {n:'4.31',t:'thm',title:'Compact maps to compact',preview:'f cts, A compact ⟹ f(A) compact.',
+   stmt:'If A ⊆ ℝᵈ is compact and f: A → ℝᵐ is continuous, then f(A) is compact in ℝᵐ.'},
+]},
+{id:'ch5',label:'Chapter 5',name:'Infinite Series',items:[
+  {n:'5.1',t:'def',title:'Infinite series and partial sums',preview:'Σaₖ defined via partial sums Sₙ → L.',
+   stmt:'The <b>infinite series</b> Σaₖ corresponds to (aₖ). The <b>n-th partial sum</b> is Sₙ = Σₖ₌₁ⁿ aₖ. The series <b>converges</b> if Sₙ → L (then Σaₖ = L); otherwise <b>diverges</b>.', diag:'partial_sums'},
+  {n:'5.3',t:'thm',title:'Divergence test',preview:'Σaₖ converges ⟹ aₖ → 0.',
+   stmt:'If Σaₖ converges then lim aₖ = 0. Equivalently (contrapositive): if aₖ ↛ 0 then Σaₖ diverges.'},
+  {n:'5.5',t:'thm',title:'Comparison test',preview:'0 ≤ aₖ ≤ bₖ: Σbₖ conv ⟹ Σaₖ conv.',
+   stmt:'If 0 ≤ aₖ ≤ bₖ for all k: (i) Σbₖ converges ⟹ Σaₖ converges. (ii) Σaₖ diverges ⟹ Σbₖ diverges.'},
+  {n:'5.7',t:'thm',title:'Integral test',preview:'Σaₖ and ∫₁^∞ f dx either both conv or both div.',
+   stmt:'If f is cts, nonneg., nonincreasing on [1,∞) and aₖ = f(k), then Σ<sub>k=1</sub><sup>∞</sup> aₖ and ∫₁<sup>∞</sup> f(x)dx either both converge or both diverge.', diag:'integral_test'},
+  {n:'5.9',t:'thm',title:'Ratio test (positive series)',preview:'L = lim aₖ₊₁/aₖ: L<1 conv, L>1 div.',
+   stmt:'For positive-term series, if L = lim aₖ₊₁/aₖ exists: L &lt; 1 ⟹ converges; L > 1 ⟹ diverges; L = 1 ⟹ inconclusive.', diag:'ratio'},
+  {n:'5.10',t:'thm',title:'Root test (positive series)',preview:'L = limsup ⁿ√aₙ: L<1 conv, L>1 div.',
+   stmt:'For positive-term series, let L = limsup<sub>n→∞</sub> <sup>n</sup>√aₙ: L &lt; 1 ⟹ converges; L > 1 ⟹ diverges; L = 1 ⟹ inconclusive.'},
+  {n:'5.11',t:'lem',title:'lim ⁿ√n = 1',preview:'Used in root test and radius of convergence.',
+   stmt:'lim<sub>n→∞</sub> n<sup>1/n</sup> = 1. Proof: ln f(x) = (ln x)/x → 0 as x → ∞.'},
+  {n:'5.14',t:'thm',title:'Absolute convergence implies convergence',preview:'Σ|aₙ| conv ⟹ Σaₙ conv.',
+   stmt:'If Σ<sub>n=1</sub><sup>∞</sup> |aₙ| converges, then Σ<sub>n=1</sub><sup>∞</sup> aₙ converges.'},
+  {n:'5.15',t:'def',title:'Absolute and conditional convergence',preview:'Absolute: Σ|aₙ| conv. Conditional: Σaₙ conv but Σ|aₙ| div.',
+   stmt:'Σaₙ <b>converges absolutely</b> if Σ|aₙ| converges. It <b>converges conditionally</b> if Σaₙ converges but Σ|aₙ| diverges.', diag:'abs_cond'},
+  {n:'5.16',t:'thm',title:'Integral test (general)',preview:'Same conditions with |aₖ|=f(k). Int conv ⟹ series conv.',
+   stmt:'If f cts, nonneg., nonincreasing on [1,∞) and |aₖ| = f(k), then Σaₖ converges if ∫₁<sup>∞</sup> f dx converges.'},
+  {n:'5.17',t:'thm',title:'Ratio test (general series)',preview:'lim |aₖ₊₁/aₖ| = L: L<1 abs. conv, L>1 div.',
+   stmt:'If L = lim |aₖ₊₁/aₖ| exists: L &lt; 1 ⟹ absolutely converges; L > 1 ⟹ diverges; L = 1 ⟹ inconclusive.'},
+  {n:'5.18',t:'thm',title:'Root test (general series)',preview:'L = limsup ⁿ√|aₙ|: L<1 abs conv, L>1 div.',
+   stmt:'Let L = limsup <sup>n</sup>√|aₙ|: L &lt; 1 ⟹ absolutely converges; L > 1 ⟹ diverges; L = 1 ⟹ inconclusive.'},
+  {n:'5.19',t:'thm',title:'Alternating series test',preview:'Signs alternate, |aₙ|↘0 ⟹ Σaₙ converges.',
+   stmt:'If (i) lim aₙ = 0, (ii) |aₙ₊₁| &lt; |aₙ| for all n, and (iii) signs alternate (aₙ₊₁/aₙ &lt; 0), then Σaₙ converges.', diag:'alt'},
+  {n:'5.20',t:'thm',title:'Riemann rearrangement theorem',preview:'Cond. conv. series can be rearranged to any sum.',
+   stmt:'By permuting the terms of a conditionally convergent series, we can make it converge to any desired value, diverge to ±∞, or make partial sums oscillate between any two values.'},
+  {n:'5.21',t:'thm',title:'Alternating series remainder',preview:'|tail| is bounded by first omitted term.',
+   stmt:'If (aₙ) satisfies the alternating series test hypotheses: |aₙ₊₁+aₙ₊₂| &lt; Σₖ₌ₙ₊₁<sup>∞</sup> aₖ &lt; |aₙ₊₁|. The error is less than the first omitted term.'},
+  {n:'5.23',t:'thm',title:'Integral test remainder',preview:'∫ₙ₊₁^∞ f ≤ tail sum ≤ ∫ₙ^∞ f.',
+   stmt:'Under integral test hypotheses: ∫<sub>n+1</sub><sup>∞</sup> f dx ≤ Σₖ₌ₙ₊₁<sup>∞</sup> aₖ ≤ ∫<sub>n</sub><sup>∞</sup> f dx.'},
+]},
+{id:'ch6',label:'Chapter 6',name:'Sequences of Functions',items:[
+  {n:'6.1',t:'def',title:'Pointwise convergence',preview:'lim fₙ(x) exists for each fixed x ∈ I.',
+   stmt:'(fₙ) <b>converges pointwise</b> on I if lim<sub>n→∞</sub> fₙ(x) exists for each x ∈ I. Then f(x) = lim fₙ(x) is the pointwise limit. Similarly for Σfₙ.', diag:'ptwise'},
+  {n:'6.2',t:'lem',title:'Pointwise convergence criterion',preview:'∀ε,x ∃N(ε,x): |fₙ(x)−f(x)|<ε for n≥N.',
+   stmt:'(fₙ) → f pointwise iff ∀ε > 0 and ∀x ∈ I ∃N = N(ε,x): |fₙ(x)−f(x)| &lt; ε for n ≥ N. Note N depends on both ε and x.'},
+  {n:'6.6',t:'def',title:'Uniform convergence',preview:'∀ε ∃N (same for all x): |fₙ(x)−f(x)|<ε.',
+   stmt:'(fₙ) <b>converges uniformly</b> to f on I if ∀ε > 0 ∃N ∈ ℤ&gt;0 (independent of x): |fₙ(x)−f(x)| &lt; ε for all n ≥ N and all x ∈ I. Key: N depends only on ε, not on x.', diag:'uniform'},
+  {n:'6.8',t:'thm',title:'Uniform limit of cts functions is cts',preview:'fₙ cts + unif. conv. ⟹ limit f is continuous.',
+   stmt:'If (fₙ) is a sequence of continuous functions on I and fₙ → f uniformly on I, then f is continuous on I.'},
+  {n:'6.9',t:'thm',title:'Uniform convergence and integration',preview:'∫fₙ → ∫f when fₙ → f uniformly.',
+   stmt:'If fₙ cts on [a,b] and fₙ → f uniformly, then ∫<sub>a</sub><sup>b</sup> fₙ(x)dx → ∫<sub>a</sub><sup>b</sup> f(x)dx. Uniform convergence lets you interchange limit and integral.'},
+  {n:'6.11',t:'thm',title:'Uniform convergence and differentiation',preview:'Uniform fₙ\' → g + pointwise fₙ(x₀) → ⟹ f\'=g.',
+   stmt:'If (fₙ) is C¹, fₙ\' → g uniformly on [a,b], and fₙ(x₀) converges for some x₀, then fₙ → f uniformly to a C¹ function with f\' = g.'},
+  {n:'6.12',t:'cor',title:'Differentiating uniform limits',preview:'fₙ→f and fₙ\'→g both uniformly ⟹ f\'=g.',
+   stmt:'If fₙ → f uniformly on [a,b] and fₙ\' → g uniformly on [a,b], then f\' = g on [a,b].'},
+  {n:'6.13',t:'thm',title:'Weierstrass M-test',preview:'|fₙ|≤Mₙ and ΣMₙ<∞ ⟹ Σfₙ conv. uniformly.',
+   stmt:'If |fₙ(x)| ≤ Mₙ for all x ∈ I and ΣMₙ converges, then Σfₙ converges uniformly and absolutely on I.', diag:'mtest'},
+  {n:'6.15',t:'def',title:'Sup-norm and convergence in B(I)',preview:'‖f−g‖ = sup|f(x)−g(x)|.',
+   stmt:'The <b>distance</b> in B(I) is ‖f−g‖ = sup{|f(x)−g(x)| | x ∈ I}. Convergence in B(I) means ‖fₙ−f‖ → 0, which is exactly uniform convergence.'},
+  {n:'6.16',t:'prop',title:'B(I)-convergence = uniform convergence',preview:'(fₙ)→f in B(I) ⟺ uniform convergence.',
+   stmt:'(fₙ) → f in B(I) (in the sup-norm sense) if and only if fₙ → f uniformly on I.'},
+  {n:'6.17',t:'def',title:'Uniformly Cauchy',preview:'∀ε ∃N: ‖fₙ−fₘ‖<ε for all m,n>N.',
+   stmt:'(fₙ) in B(I) is <b>uniformly Cauchy</b> if ∀ε > 0 ∃N: ‖fₙ−fₘ‖ &lt; ε for all m, n > N.'},
+  {n:'6.18',t:'thm',title:'Uniform Cauchy ⟺ uniform convergence',preview:'B(I) is complete: Cauchy ⟺ convergent.',
+   stmt:'A sequence in B(I) converges uniformly if and only if it is uniformly Cauchy. (B(I) is complete in the sup-norm.)'},
+  {n:'6.20',t:'cor',title:'C(I) is complete',preview:'Uniformly Cauchy sequences in C(I) converge in C(I).',
+   stmt:'If I is closed and bounded, every uniformly Cauchy sequence in C(I) converges uniformly to a function in C(I). (C(I) is complete.)'},
+]},
+{id:'ch7',label:'Chapter 7',name:'Power Series',items:[
+  {n:'7.3',t:'thm',title:'Radius of convergence',preview:'R = 1/limsup ⁿ√|aₙ|. Conv for |x−c|<R, div for |x−c|>R.',
+   stmt:'For Σaₙ(x−c)ⁿ let R = 1/limsup <sup>n</sup>√|aₙ| (R ∈ [0,∞]). (i) Diverges for |x−c| > R. (ii) Converges absolutely for |x−c| &lt; R. (iii) Converges uniformly on [c−r,c+r] for any r &lt; R.', diag:'radius'},
+  {n:'7.4',t:'lem',title:'lim ⁿ√|P(n)| = 1',preview:'For any polynomial P.',
+   stmt:'For any polynomial P, lim<sub>n→∞</sub> |P(n)|<sup>1/n</sup> = 1. Used in radius of convergence calculations.'},
+  {n:'7.5',t:'prop',title:'Term-by-term deriv/int preserves R',preview:'Differentiated and integrated series have the same R.',
+   stmt:'If Σaₙ(x−c)ⁿ has radius R, then the term-by-term derivative Σnaₙ(x−c)ⁿ⁻¹ and integral Σaₙ/(n+1)·(x−c)ⁿ⁺¹ also have radius R.'},
+  {n:'7.6',t:'thm',title:'Power series is continuous',preview:'Σaₙ(x−c)ⁿ with R>0 is continuous on (c−R, c+R).',
+   stmt:'A power series Σaₙ(x−c)ⁿ whose radius of convergence R > 0 is a continuous function on (c−R, c+R).'},
+  {n:'7.7',t:'lem',title:'Equal radii for related series',preview:'Σaₙ(x−c)ⁿ and its term-by-term deriv/int have same R.',
+   stmt:'Σaₙ(x−c)ⁿ, Σnaₙ(x−c)ⁿ⁻¹, and Σaₙ/(n+1)·(x−c)ⁿ⁺¹ all have the same radius of convergence.'},
+  {n:'7.8',t:'thm',title:'Term-by-term integration and differentiation',preview:'Can integrate and differentiate a power series term by term.',
+   stmt:'If R > 0, for |x−c| &lt; R: (i) ∫<sub>c</sub><sup>x</sup>Σaₙ(t−c)ⁿdt = Σaₙ/(n+1)·(x−c)ⁿ⁺¹; (ii) d/dx Σaₙ(x−c)ⁿ = Σnaₙ(x−c)ⁿ⁻¹.'},
+  {n:'7.10',t:'cor',title:'Power series is C∞',preview:'Σaₙ(x−c)ⁿ is infinitely differentiable with aₙ = f⁽ⁿ⁾(c)/n!.',
+   stmt:'A power series with R > 0 is C∞ on (c−R, c+R) and d<sup>k</sup>/dx<sup>k</sup> Σaₙ(x−c)ⁿ = Σ<sub>n≥k</sub> n!/(n−k)! · aₙ(x−c)ⁿ⁻ᵏ. In particular aₙ = f<sup>(n)</sup>(c)/n!.'},
+  {n:'7.11',t:'cor',title:'Identity theorem for power series',preview:'Two series agreeing on an interval have equal coefficients.',
+   stmt:'If Σaₙ(x−c)ⁿ and Σbₙ(x−c)ⁿ agree on some (c−r,c+r) with r > 0, then aₙ = bₙ for all n.'},
+  {n:'7.12',t:'thm',title:"Taylor's theorem with integral remainder",preview:'Rₙ(x) = (1/n!)∫(x−u)ⁿf⁽ⁿ⁺¹⁾(u)du.',
+   stmt:'If f<sup>(n+1)</sup> exists and is continuous on I and Rₙ(x) = f(x) − Σₖ₌₀ⁿ f<sup>(k)</sup>(c)/k! · (x−c)ᵏ, then Rₙ(x) = (1/n!)∫<sub>c</sub><sup>x</sup>(x−u)ⁿf<sup>(n+1)</sup>(u)du. Lagrange form: Rₙ(x) = f<sup>(n+1)</sup>(ξ)/(n+1)! · (x−c)ⁿ⁺¹ for some ξ between c and x.', diag:'taylor'},
+]},
+];
+
+// mini diagrams as inline SVG strings
+const diagrams = {
+bounds: `<svg viewBox="0 0 320 70" width="100%"><defs><marker id="dA" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#8a867a" stroke-width="1.5" stroke-linecap="round"/></marker></defs><line x1="20" y1="38" x2="300" y2="38" stroke="#d8d4c8" stroke-width="1" marker-end="url(#dA)"/><rect x="90" y="28" width="120" height="20" rx="3" fill="#edf4ff" stroke="#4a80d0" stroke-width="0.8"/><text x="150" y="42" text-anchor="middle" font-size="11" fill="#1a3a6e" font-family="DM Mono, monospace">A</text><line x1="75" y1="26" x2="75" y2="52" stroke="#2a9060" stroke-width="1.5"/><text x="75" y="20" text-anchor="middle" font-size="10" fill="#1a5c3a" font-family="DM Sans, sans-serif">ℓ = inf</text><line x1="220" y1="26" x2="220" y2="52" stroke="#c04030" stroke-width="1.5"/><text x="220" y="20" text-anchor="middle" font-size="10" fill="#8a2010" font-family="DM Sans, sans-serif">u = sup</text><line x1="240" y1="26" x2="240" y2="52" stroke="#c87020" stroke-width="1" stroke-dasharray="3 2"/><text x="240" y="62" text-anchor="middle" font-size="9" fill="#8a5a10" font-family="DM Sans, sans-serif">larger ub</text></svg>`,
+
+number_line: `<svg viewBox="0 0 320 60" width="100%"><defs><marker id="dB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#8a867a" stroke-width="1.5" stroke-linecap="round"/></marker></defs><line x1="20" y1="32" x2="300" y2="32" stroke="#d8d4c8" stroke-width="1" marker-end="url(#dB)"/><rect x="80" y="23" width="140" height="18" rx="3" fill="#edf4ff" stroke="#4a80d0" stroke-width="0.8"/><text x="150" y="36" text-anchor="middle" font-size="10" fill="#1a3a6e" font-family="DM Mono, monospace">A ⊆ ℝ (bounded)</text><line x1="68" y1="22" x2="68" y2="44" stroke="#2a9060" stroke-width="1.5"/><text x="68" y="16" text-anchor="middle" font-size="9" fill="#1a5c3a" font-family="DM Sans, sans-serif">inf A</text><line x1="232" y1="22" x2="232" y2="44" stroke="#c04030" stroke-width="1.5"/><text x="232" y="16" text-anchor="middle" font-size="9" fill="#8a2010" font-family="DM Sans, sans-serif">sup A</text></svg>`,
+
+lub: `<svg viewBox="0 0 320 80" width="100%"><defs><marker id="dC" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#8a867a" stroke-width="1.5" stroke-linecap="round"/></marker></defs><line x1="20" y1="40" x2="300" y2="40" stroke="#d8d4c8" stroke-width="1" marker-end="url(#dC)"/><rect x="60" y="30" width="130" height="20" rx="3" fill="#edfaf2" stroke="#2a9060" stroke-width="0.8"/><text x="125" y="44" text-anchor="middle" font-size="10" fill="#1a5c3a" font-family="DM Mono, monospace">A ⊆ ℝ, bdd above</text><line x1="200" y1="28" x2="200" y2="54" stroke="#c04030" stroke-width="2"/><text x="200" y="70" text-anchor="middle" font-size="10" fill="#8a2010" font-family="DM Sans, sans-serif">sup A (guaranteed by Thm 1.9!)</text></svg>`,
+
+sup_char: `<svg viewBox="0 0 320 80" width="100%"><defs><marker id="dD" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#8a867a" stroke-width="1.5" stroke-linecap="round"/></marker></defs><line x1="20" y1="42" x2="300" y2="42" stroke="#d8d4c8" stroke-width="1" marker-end="url(#dD)"/><line x1="190" y1="28" x2="190" y2="58" stroke="#c04030" stroke-width="2"/><text x="190" y="22" text-anchor="middle" font-size="10" fill="#8a2010" font-family="DM Mono, monospace">s = sup A</text><rect x="148" y="35" width="42" height="14" rx="3" fill="#fff8ed" stroke="#c87020" stroke-width="0.8"/><text x="169" y="45" text-anchor="middle" font-size="9" fill="#8a5a10" font-family="DM Mono, monospace">(s−ε,s]</text><text x="169" y="68" text-anchor="middle" font-size="9" fill="#1a5c3a" font-family="DM Sans, sans-serif">✓ always meets A</text><text x="220" y="58" font-size="9" fill="#8a867a" font-family="DM Sans, sans-serif">no a&gt;s</text></svg>`,
+
+epsilon_n: `<svg viewBox="0 0 320 90" width="100%"><line x1="20" y1="52" x2="300" y2="52" stroke="#d8d4c8" stroke-width="0.8"/><polyline points="25,80 55,55 85,70 115,48 145,62 175,50 205,53 235,52 265,52" fill="none" stroke="#4a80d0" stroke-width="1.8"/><line x1="200" y1="40" x2="200" y2="66" stroke="#8a867a" stroke-width="0.8" stroke-dasharray="3 2"/><text x="200" y="30" text-anchor="middle" font-size="9" fill="#8a867a" font-family="DM Mono, monospace">N</text><rect x="200" y="40" width="80" height="24" rx="3" fill="#edfaf2" stroke="#2a9060" stroke-width="0.6"/><text x="240" y="54" text-anchor="middle" font-size="9" fill="#1a5c3a" font-family="DM Sans, sans-serif">within ε of L</text><line x1="295" y1="44" x2="295" y2="60" stroke="#c87020" stroke-width="0.8"/><line x1="291" y1="44" x2="295" y2="44" stroke="#c87020" stroke-width="0.8"/><line x1="291" y1="60" x2="295" y2="60" stroke="#c87020" stroke-width="0.8"/><text x="300" y="53" font-size="9" fill="#8a5a10" font-family="DM Sans, sans-serif">ε</text><text x="255" y="15" text-anchor="middle" font-size="10" fill="#4a80d0" font-family="DM Mono, monospace">L</text></svg>`,
+
+conv_bdd: `<svg viewBox="0 0 300 64" width="100%"><rect x="20" y="14" width="88" height="28" rx="5" fill="#edfaf2" stroke="#2a9060" stroke-width="0.8"/><text x="64" y="32" text-anchor="middle" font-size="11" fill="#1a5c3a" font-family="DM Sans, sans-serif">convergent</text><rect x="178" y="14" width="86" height="28" rx="5" fill="#edf4ff" stroke="#4a80d0" stroke-width="0.8"/><text x="221" y="32" text-anchor="middle" font-size="11" fill="#1a3a6e" font-family="DM Sans, sans-serif">bounded</text><line x1="110" y1="28" x2="176" y2="28" stroke="#2a9060" stroke-width="1.5" marker-end="url(#dC)"/><text x="143" y="21" text-anchor="middle" font-size="10" fill="#1a5c3a" font-family="DM Sans, sans-serif">⟹</text><text x="143" y="56" text-anchor="middle" font-size="9" fill="#c04030" font-family="DM Sans, sans-serif">⟸ fails: (−1)ⁿ</text></svg>`,
+
+mono: `<svg viewBox="0 0 320 75" width="100%"><polyline points="20,68 55,60 90,53 125,47 160,43 195,41 230,40 265,39.5" fill="none" stroke="#4a80d0" stroke-width="2"/><line x1="20" y1="37" x2="300" y2="37" stroke="#c04030" stroke-width="1" stroke-dasharray="4 3"/><text x="305" y="41" font-size="9" fill="#8a2010" font-family="DM Mono, monospace">sup</text><text x="140" y="18" text-anchor="middle" font-size="10" fill="#4a80d0" font-family="DM Sans, sans-serif">bounded nondecreasing → lim aₙ = sup{aₙ}</text></svg>`,
+
+bw: `<svg viewBox="0 0 320 80" width="100%"><line x1="20" y1="42" x2="300" y2="42" stroke="#d8d4c8" stroke-width="0.8"/><line x1="40" y1="33" x2="40" y2="53" stroke="#d8d4c8" stroke-width="1"/><line x1="280" y1="33" x2="280" y2="53" stroke="#d8d4c8" stroke-width="1"/><text x="160" y="24" text-anchor="middle" font-size="9" fill="#8a867a" font-family="DM Sans, sans-serif">bounded sequence — dots scattered in [m, M]</text><circle cx="60" cy="42" r="3" fill="#8a867a"/><circle cx="95" cy="42" r="3" fill="#8a867a"/><circle cx="130" cy="42" r="3" fill="#8a867a"/><circle cx="165" cy="42" r="3" fill="#8a867a"/><circle cx="200" cy="42" r="3" fill="#8a867a"/><circle cx="240" cy="42" r="3" fill="#8a867a"/><circle cx="165" cy="42" r="7" fill="none" stroke="#c8440a" stroke-width="1.5"/><circle cx="130" cy="42" r="7" fill="none" stroke="#c8440a" stroke-width="1.5"/><circle cx="200" cy="42" r="7" fill="none" stroke="#c8440a" stroke-width="1.5"/><line x1="165" y1="33" x2="165" y2="53" stroke="#2a9060" stroke-width="1.5" stroke-dasharray="3 2"/><text x="165" y="68" text-anchor="middle" font-size="9" fill="#1a5c3a" font-family="DM Sans, sans-serif">convergent subsequence (circled) → L</text></svg>`,
+
+limsup_diag: `<svg viewBox="0 0 320 80" width="100%"><polyline points="20,42 45,22 70,54 95,30 120,48 145,35 170,44 195,38 220,42 245,40 270,41" fill="none" stroke="#8a867a" stroke-width="1.2"/><line x1="20" y1="22" x2="280" y2="22" stroke="#c04030" stroke-width="1.5" stroke-dasharray="4 3"/><line x1="20" y1="54" x2="280" y2="54" stroke="#2a9060" stroke-width="1.5" stroke-dasharray="4 3"/><text x="285" y="26" font-size="9" fill="#8a2010" font-family="DM Mono, monospace">limsup</text><text x="285" y="58" font-size="9" fill="#1a5c3a" font-family="DM Mono, monospace">liminf</text><text x="150" y="72" text-anchor="middle" font-size="9" fill="#8a867a" font-family="DM Sans, sans-serif">sequence bounces but stays between the two lines</text></svg>`,
+
+cauchy_diag: `<svg viewBox="0 0 320 72" width="100%"><polyline points="20,60 55,52 90,45 125,40 160,38 195,37 230,36.5 265,36" fill="none" stroke="#4a80d0" stroke-width="1.8"/><line x1="118" y1="24" x2="118" y2="60" stroke="#8a867a" stroke-width="0.8" stroke-dasharray="3 2"/><text x="118" y="18" text-anchor="middle" font-size="9" fill="#8a867a" font-family="DM Mono, monospace">N(ε)</text><rect x="118" y="30" width="148" height="16" rx="3" fill="#edfaf2" stroke="#2a9060" stroke-width="0.6"/><text x="192" y="41" text-anchor="middle" font-size="9" fill="#1a5c3a" font-family="DM Sans, sans-serif">|aₙ−aₘ|&lt;ε for all m,n≥N</text><text x="160" y="65" text-anchor="middle" font-size="9" fill="#4a80d0" font-family="DM Sans, sans-serif">ℝ complete: this ⟺ convergence</text></svg>`,
+
+componentwise: `<svg viewBox="0 0 320 64" width="100%"><rect x="20" y="14" width="90" height="28" rx="5" fill="#f5eeff" stroke="#7a40b0" stroke-width="0.8"/><text x="65" y="32" text-anchor="middle" font-size="11" fill="#4a1a70" font-family="DM Mono, monospace">xₙ → L in ℝᵈ</text><rect x="186" y="10" width="112" height="36" rx="5" fill="#edfaf2" stroke="#2a9060" stroke-width="0.8"/><text x="242" y="27" text-anchor="middle" font-size="10" fill="#1a5c3a" font-family="DM Sans, sans-serif">xₙ,₁ → L₁</text><text x="242" y="40" text-anchor="middle" font-size="10" fill="#1a5c3a" font-family="DM Sans, sans-serif">xₙ,₂ → L₂, …</text><text x="153" y="32" text-anchor="middle" font-size="14" fill="#8a867a" font-family="DM Sans, sans-serif">⟺</text><text x="160" y="58" text-anchor="middle" font-size="9" fill="#8a867a" font-family="DM Sans, sans-serif">d problems in ℝ instead of one in ℝᵈ</text></svg>`,
+
+contraction: `<svg viewBox="0 0 300 80" width="100%"><circle cx="90" cy="40" r="32" fill="#fff8ed" stroke="#c87020" stroke-width="0.8"/><circle cx="90" cy="40" r="20" fill="#faeeda" stroke="#c87020" stroke-width="0.8"/><circle cx="90" cy="40" r="10" fill="#ef9f27" stroke="#8a5a10" stroke-width="0.8"/><circle cx="90" cy="40" r="3" fill="#412402"/><text x="90" y="82" text-anchor="middle" font-size="9" fill="#8a5a10" font-family="DM Sans, sans-serif">T pulls everything towards x*</text><text x="200" y="28" text-anchor="middle" font-size="10" fill="#1a5c3a" font-family="DM Sans, sans-serif">‖T(x)−T(y)‖≤K‖x−y‖</text><text x="200" y="42" text-anchor="middle" font-size="10" fill="#1a5c3a" font-family="DM Mono, monospace">K &lt; 1</text><text x="200" y="60" text-anchor="middle" font-size="10" fill="#8a2010" font-family="DM Sans, sans-serif">⟹ unique fixed pt x*</text></svg>`,
+
+open_closed: `<svg viewBox="0 0 300 70" width="100%"><circle cx="80" cy="36" r="28" fill="#edf4ff"/><circle cx="80" cy="36" r="28" fill="none" stroke="#4a80d0" stroke-width="1.5" stroke-dasharray="5 3"/><text x="80" y="40" text-anchor="middle" font-size="10" fill="#1a3a6e" font-family="DM Sans, sans-serif">open</text><text x="80" y="14" text-anchor="middle" font-size="9" fill="#4a80d0" font-family="DM Sans, sans-serif">boundary excluded (dashed)</text><circle cx="210" cy="36" r="26" fill="#edfaf2" stroke="#2a9060" stroke-width="1.5"/><text x="210" y="40" text-anchor="middle" font-size="10" fill="#1a5c3a" font-family="DM Sans, sans-serif">closed</text><text x="210" y="14" text-anchor="middle" font-size="9" fill="#2a9060" font-family="DM Sans, sans-serif">boundary included (solid)</text></svg>`,
+
+unions: `<svg viewBox="0 0 300 64" width="100%"><ellipse cx="68" cy="32" rx="26" ry="18" fill="#edf4ff" stroke="#4a80d0" stroke-width="0.8"/><ellipse cx="98" cy="32" rx="26" ry="18" fill="#edf4ff" stroke="#4a80d0" stroke-width="0.8"/><ellipse cx="128" cy="32" rx="26" ry="18" fill="#edf4ff" stroke="#4a80d0" stroke-width="0.8"/><text x="98" y="56" text-anchor="middle" font-size="9" fill="#1a3a6e" font-family="DM Sans, sans-serif">∪ (any #) of open = open</text><ellipse cx="210" cy="24" rx="22" ry="14" fill="#edfaf2" stroke="#2a9060" stroke-width="0.8"/><ellipse cx="220" cy="44" rx="22" ry="14" fill="#edfaf2" stroke="#2a9060" stroke-width="0.8"/><text x="218" y="62" text-anchor="middle" font-size="9" fill="#1a5c3a" font-family="DM Sans, sans-serif">∩ of closed = closed</text></svg>`,
+
+closed5: `<svg viewBox="0 0 320 88" width="100%"><rect x="8" y="8" width="304" height="72" rx="6" fill="none" stroke="#d8d4c8" stroke-width="0.8"/><text x="160" y="26" text-anchor="middle" font-size="11" font-weight="500" fill="#1a1915" font-family="DM Sans, sans-serif">A is closed ⟺ any of:</text><text x="22" y="44" font-size="10" fill="#1a3a6e" font-family="DM Mono, monospace">der(A)⊆A</text><text x="22" y="58" font-size="10" fill="#1a5c3a" font-family="DM Mono, monospace">bd(A)⊆A</text><text x="22" y="72" font-size="10" fill="#8a5a10" font-family="DM Mono, monospace">cl(A)⊆A</text><text x="170" y="44" font-size="10" fill="#7a3080" font-family="DM Mono, monospace">xₙ→x in A ⇒ x∈A</text></svg>`,
+
+compact_diag: `<svg viewBox="0 0 300 64" width="100%"><ellipse cx="150" cy="32" rx="110" ry="24" fill="#f5eeff" stroke="#7a40b0" stroke-width="0.8"/><text x="150" y="25" text-anchor="middle" font-size="11" font-weight="500" fill="#4a1a70" font-family="DM Sans, sans-serif">compact K</text><text x="150" y="40" text-anchor="middle" font-size="10" fill="#4a1a70" font-family="DM Mono, monospace">closed + bounded</text><text x="150" y="58" text-anchor="middle" font-size="9" fill="#8a867a" font-family="DM Sans, sans-serif">every sequence has a conv. subsequence in K</text></svg>`,
+
+evt: `<svg viewBox="0 0 300 60" width="100%"><rect x="16" y="14" width="80" height="28" rx="5" fill="#f5eeff" stroke="#7a40b0" stroke-width="0.8"/><text x="56" y="32" text-anchor="middle" font-size="10" fill="#4a1a70" font-family="DM Mono, monospace">K compact</text><rect x="190" y="10" width="94" height="36" rx="5" fill="#edfaf2" stroke="#2a9060" stroke-width="0.8"/><text x="237" y="27" text-anchor="middle" font-size="10" fill="#1a5c3a" font-family="DM Sans, sans-serif">f(K) compact</text><text x="237" y="40" text-anchor="middle" font-size="9" fill="#1a5c3a" font-family="DM Sans, sans-serif">min & max attained</text><path d="M98 28 L188 28" stroke="#2a9060" stroke-width="1.2" marker-end="url(#dC)" fill="none"/><text x="143" y="21" text-anchor="middle" font-size="9" fill="#8a867a" font-family="DM Sans, sans-serif">f continuous</text></svg>`,
+
+heine_borel: `<svg viewBox="0 0 320 80" width="100%"><rect x="10" y="10" width="84" height="38" rx="5" fill="#edf4ff" stroke="#4a80d0" stroke-width="0.8"/><text x="52" y="27" text-anchor="middle" font-size="9" fill="#1a3a6e" font-family="DM Sans, sans-serif">(i) closed &amp;</text><text x="52" y="40" text-anchor="middle" font-size="9" fill="#1a3a6e" font-family="DM Sans, sans-serif">bounded</text><rect x="118" y="10" width="84" height="38" rx="5" fill="#edfaf2" stroke="#2a9060" stroke-width="0.8"/><text x="160" y="27" text-anchor="middle" font-size="9" fill="#1a5c3a" font-family="DM Sans, sans-serif">(ii) every seq.</text><text x="160" y="40" text-anchor="middle" font-size="9" fill="#1a5c3a" font-family="DM Sans, sans-serif">has conv. subseq.</text><rect x="226" y="10" width="84" height="38" rx="5" fill="#fff8ed" stroke="#c87020" stroke-width="0.8"/><text x="268" y="27" text-anchor="middle" font-size="9" fill="#8a5a10" font-family="DM Sans, sans-serif">(iii) open covers</text><text x="268" y="40" text-anchor="middle" font-size="9" fill="#8a5a10" font-family="DM Sans, sans-serif">→ finite subcover</text><text x="105" y="34" text-anchor="middle" font-size="12" fill="#8a867a" font-family="DM Sans, sans-serif">⟺</text><text x="213" y="34" text-anchor="middle" font-size="12" fill="#8a867a" font-family="DM Sans, sans-serif">⟺</text><text x="160" y="68" text-anchor="middle" font-size="9" fill="#8a867a" font-family="DM Sans, sans-serif">Heine–Borel: all three are equivalent</text></svg>`,
+
+unif: `<svg viewBox="0 0 320 72" width="100%"><line x1="20" y1="44" x2="300" y2="44" stroke="#d8d4c8" stroke-width="0.8"/><line x1="88" y1="33" x2="88" y2="57" stroke="#4a80d0" stroke-width="1.2"/><line x1="148" y1="33" x2="148" y2="57" stroke="#4a80d0" stroke-width="1.2"/><rect x="88" y="37" width="60" height="14" rx="3" fill="#edf4ff" fill-opacity="0.8"/><text x="118" y="47" text-anchor="middle" font-size="9" fill="#1a3a6e" font-family="DM Mono, monospace">δ (same ∀x)</text><text x="160" y="24" text-anchor="middle" font-size="9" fill="#4a4840" font-family="DM Sans, sans-serif">‖x−y‖&lt;δ ⇒ |f(x)−f(y)|&lt;ε</text><text x="160" y="64" text-anchor="middle" font-size="9" fill="#c8440a" font-family="DM Sans, sans-serif">δ is the same everywhere — that's the key!</text></svg>`,
+
+partial_sums: `<svg viewBox="0 0 320 72" width="100%"><rect x="18" y="18" width="44" height="22" rx="4" fill="#edf4ff" stroke="#4a80d0" stroke-width="0.7"/><rect x="68" y="18" width="44" height="22" rx="4" fill="#edf4ff" stroke="#4a80d0" stroke-width="0.7"/><rect x="118" y="18" width="44" height="22" rx="4" fill="#edf4ff" stroke="#4a80d0" stroke-width="0.7"/><text x="40" y="33" text-anchor="middle" font-size="11" fill="#1a3a6e" font-family="DM Mono, monospace">S₁</text><text x="90" y="33" text-anchor="middle" font-size="11" fill="#1a3a6e" font-family="DM Mono, monospace">S₂</text><text x="140" y="33" text-anchor="middle" font-size="11" fill="#1a3a6e" font-family="DM Mono, monospace">S₃</text><text x="180" y="33" font-size="14" fill="#8a867a" font-family="DM Sans, sans-serif">→</text><rect x="198" y="14" width="60" height="30" rx="5" fill="#edfaf2" stroke="#2a9060" stroke-width="0.8"/><text x="228" y="28" text-anchor="middle" font-size="10" fill="#1a5c3a" font-family="DM Mono, monospace">L = Σaₖ</text><text x="228" y="40" text-anchor="middle" font-size="9" fill="#1a5c3a" font-family="DM Sans, sans-serif">converges</text><text x="160" y="62" text-anchor="middle" font-size="9" fill="#8a867a" font-family="DM Sans, sans-serif">series = limit of partial sums Sₙ = a₁+…+aₙ</text></svg>`,
+
+integral_test: `<svg viewBox="0 0 320 80" width="100%"><polyline points="20,68 45,48 70,38 95,33 120,30 145,28 170,27 195,26 220,26" fill="none" stroke="#4a80d0" stroke-width="1.5"/><rect x="20" y="48" width="20" height="22" fill="#edf4ff" fill-opacity="0.7" stroke="#4a80d0" stroke-width="0.6"/><rect x="45" y="38" width="20" height="32" fill="#edf4ff" fill-opacity="0.7" stroke="#4a80d0" stroke-width="0.6"/><rect x="70" y="33" width="20" height="37" fill="#edf4ff" fill-opacity="0.7" stroke="#4a80d0" stroke-width="0.6"/><text x="160" y="74" text-anchor="middle" font-size="9" fill="#4a4840" font-family="DM Sans, sans-serif">bars ≈ Σaₖ ; curve ≈ ∫f dx — they match</text></svg>`,
+
+ratio: `<svg viewBox="0 0 320 64" width="100%"><rect x="8" y="14" width="304" height="36" rx="5" fill="none" stroke="#d8d4c8" stroke-width="0.8"/><text x="30" y="29" font-size="10" fill="#1a1915" font-family="DM Mono, monospace">L = lim |aₖ₊₁/aₖ|</text><line x1="162" y1="16" x2="162" y2="48" stroke="#d8d4c8" stroke-width="0.8" stroke-dasharray="3 2"/><text x="88" y="43" text-anchor="middle" font-size="10" fill="#1a5c3a" font-family="DM Sans, sans-serif">L &lt; 1 → converges</text><text x="238" y="43" text-anchor="middle" font-size="10" fill="#8a2010" font-family="DM Sans, sans-serif">L &gt; 1 → diverges</text><text x="162" y="10" text-anchor="middle" font-size="9" fill="#8a867a" font-family="DM Sans, sans-serif">L = 1: test inconclusive</text></svg>`,
+
+abs_cond: `<svg viewBox="0 0 300 70" width="100%"><ellipse cx="110" cy="36" rx="80" ry="26" fill="#fff8ed" stroke="#c87020" stroke-width="0.8"/><text x="110" y="25" text-anchor="middle" font-size="9" fill="#8a5a10" font-family="DM Sans, sans-serif">convergent series</text><ellipse cx="100" cy="40" rx="52" ry="17" fill="#edfaf2" stroke="#2a9060" stroke-width="0.8"/><text x="100" y="44" text-anchor="middle" font-size="9" fill="#1a5c3a" font-family="DM Sans, sans-serif">absolutely conv.</text><text x="178" y="38" text-anchor="middle" font-size="9" fill="#8a5a10" font-family="DM Sans, sans-serif">conditionally</text><text x="178" y="50" text-anchor="middle" font-size="9" fill="#8a5a10" font-family="DM Sans, sans-serif">conv. only</text></svg>`,
+
+alt: `<svg viewBox="0 0 320 68" width="100%"><polyline points="20,38 55,22 90,46 125,30 160,40 195,34 230,37 265,36" fill="none" stroke="#4a80d0" stroke-width="1.8"/><line x1="20" y1="36" x2="290" y2="36" stroke="#c04030" stroke-width="1" stroke-dasharray="4 3"/><text x="160" y="58" text-anchor="middle" font-size="9" fill="#4a4840" font-family="DM Sans, sans-serif">oscillates with shrinking amplitude → converges</text><text x="160" y="14" text-anchor="middle" font-size="9" fill="#1a3a6e" font-family="DM Sans, sans-serif">signs alternate, |aₙ|↘0 ⟹ converges</text></svg>`,
+
+ptwise: `<svg viewBox="0 0 320 90" width="100%"><polyline points="20,70 65,38 110,56 155,30 200,48 245,39 280,36" fill="none" stroke="#c8b8e0" stroke-width="1"/><polyline points="20,65 65,33 110,51 155,25 200,43 245,34 280,31" fill="none" stroke="#9878c8" stroke-width="1"/><polyline points="20,60 65,28 110,46 155,20 200,38 245,29 280,26" fill="none" stroke="#7040b0" stroke-width="1"/><polyline points="20,54 65,22 110,40 155,15 200,32 245,23 280,20" fill="none" stroke="#1a1915" stroke-width="2"/><text x="285" y="24" font-size="9" fill="#1a1915" font-family="DM Mono, monospace">f</text><text x="285" y="36" font-size="9" fill="#7040b0" font-family="DM Mono, monospace">f₃</text><text x="25" y="14" font-size="9" fill="#4a4840" font-family="DM Sans, sans-serif">fₙ</text><line x1="160" y1="75" x2="160" y2="90" stroke="none"/><text x="160" y="84" text-anchor="middle" font-size="9" fill="#4a4840" font-family="DM Sans, sans-serif">pointwise: N may vary with x</text></svg>`,
+
+uniform: `<svg viewBox="0 0 320 88" width="100%"><polyline points="20,70 65,38 110,56 155,30 200,48 245,39 280,36" fill="none" stroke="#c8b8e0" stroke-width="1"/><polyline points="20,65 65,33 110,51 155,25 200,43 245,34 280,31" fill="none" stroke="#9878c8" stroke-width="1"/><polyline points="20,60 65,28 110,46 155,20 200,38 245,29 280,26" fill="none" stroke="#1a1915" stroke-width="2.5"/><text x="285" y="30" font-size="9" fill="#1a1915" font-family="DM Mono, monospace">f</text><path d="M20,30 L280,16" stroke="#c8440a" stroke-width="0.8" stroke-dasharray="3 2" fill="none"/><path d="M20,50 L280,36" stroke="#c8440a" stroke-width="0.8" stroke-dasharray="3 2" fill="none"/><text x="160" y="78" text-anchor="middle" font-size="9" fill="#c8440a" font-family="DM Sans, sans-serif">ε-tube: all fₙ inside for n≥N (same N for all x)</text></svg>`,
+
+mtest: `<svg viewBox="0 0 300 62" width="100%"><rect x="14" y="12" width="88" height="24" rx="4" fill="#fff8ed" stroke="#c87020" stroke-width="0.7"/><text x="58" y="28" text-anchor="middle" font-size="10" fill="#8a5a10" font-family="DM Mono, monospace">|fₙ(x)| ≤ Mₙ ∀x</text><rect x="14" y="40" width="88" height="18" rx="4" fill="#fff8ed" stroke="#c87020" stroke-width="0.7"/><text x="58" y="53" text-anchor="middle" font-size="10" fill="#8a5a10" font-family="DM Mono, monospace">ΣMₙ &lt; ∞</text><rect x="185" y="22" width="100" height="24" rx="4" fill="#edfaf2" stroke="#2a9060" stroke-width="0.7"/><text x="235" y="33" text-anchor="middle" font-size="10" fill="#1a5c3a" font-family="DM Sans, sans-serif">Σfₙ unif. conv.</text><path d="M104 34 L183 34" stroke="#2a9060" stroke-width="1.2" marker-end="url(#dC)" fill="none"/><text x="143" y="27" text-anchor="middle" font-size="9" fill="#8a867a" font-family="DM Sans, sans-serif">⟹</text></svg>`,
+
+radius: `<svg viewBox="0 0 320 68" width="100%"><line x1="20" y1="38" x2="300" y2="38" stroke="#d8d4c8" stroke-width="0.8"/><line x1="160" y1="24" x2="160" y2="54" stroke="#7a40b0" stroke-width="2"/><text x="160" y="18" text-anchor="middle" font-size="9" fill="#4a1a70" font-family="DM Mono, monospace">c</text><rect x="88" y="30" width="144" height="16" rx="3" fill="#edfaf2" stroke="#2a9060" stroke-width="0.7"/><text x="160" y="41" text-anchor="middle" font-size="9" fill="#1a5c3a" font-family="DM Mono, monospace">converges absolutely (|x−c| &lt; R)</text><line x1="88" y1="24" x2="88" y2="54" stroke="#c04030" stroke-width="1.5"/><line x1="232" y1="24" x2="232" y2="54" stroke="#c04030" stroke-width="1.5"/><text x="44" y="34" text-anchor="middle" font-size="9" fill="#8a2010" font-family="DM Sans, sans-serif">diverges</text><text x="266" y="34" text-anchor="middle" font-size="9" fill="#8a2010" font-family="DM Sans, sans-serif">diverges</text><text x="88" y="62" text-anchor="middle" font-size="9" fill="#8a5a10" font-family="DM Mono, monospace">c−R</text><text x="232" y="62" text-anchor="middle" font-size="9" fill="#8a5a10" font-family="DM Mono, monospace">c+R</text></svg>`,
+
+taylor: `<svg viewBox="0 0 320 82" width="100%"><polyline points="20,68 60,48 100,36 140,32 180,36 220,46 260,62" fill="none" stroke="#c04030" stroke-width="2"/><polyline points="80,44 120,34 160,32 200,38 240,50" fill="none" stroke="#2a9060" stroke-width="1.5" stroke-dasharray="5 3"/><circle cx="140" cy="32" r="3.5" fill="#7a40b0"/><text x="140" y="22" text-anchor="middle" font-size="9" fill="#4a1a70" font-family="DM Mono, monospace">c</text><text x="250" y="50" text-anchor="start" font-size="9" fill="#2a9060" font-family="DM Mono, monospace">Tₙ(x)</text><text x="260" y="62" text-anchor="start" font-size="9" fill="#c04030" font-family="DM Mono, monospace">f(x)</text><text x="160" y="76" text-anchor="middle" font-size="9" fill="#8a867a" font-family="DM Sans, sans-serif">Rₙ(x) = gap between f and its n-th Taylor poly</text></svg>`,
+};
+
+const typeLabels = {def:'Definition',thm:'Theorem',prop:'Proposition',lem:'Lemma',cor:'Corollary'};
+const chColors = ['var(--ch1)','var(--ch2)','var(--ch3)','var(--ch4)','var(--ch5)','var(--ch6)','var(--ch7)'];
+let activeType = 'all', searchQuery = '';
+
+/* ── THEME ── */
+const html = document.documentElement;
+const btn = document.getElementById('theme-btn');
+function setTheme(t) {
+  html.setAttribute('data-theme', t);
+  btn.textContent = t === 'dark' ? '☀' : '☾';
+  localStorage.setItem('math281-theme', t);
+}
+btn.addEventListener('click', () => setTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+const saved = localStorage.getItem('math281-theme') || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+setTheme(saved);
+
+/* ── BUILD ── */
+function buildBoard() {
+  const main = document.getElementById('main');
+  main.innerHTML = '<div class="empty" id="empty"><div class="empty-title">No results</div><p>Try a different search or filter.</p></div>';
+
+  chapters.forEach((ch, ci) => {
+    const block = document.createElement('div');
+    block.className = 'chapter-block';
+    block.id = ch.id;
+
+    block.innerHTML = `
+      <div class="chapter-banner">
+        <div class="ch-accent-line" style="background:${chColors[ci]}"></div>
+        <div class="ch-banner-text">
+          <div class="ch-banner-eyebrow">${ch.label}</div>
+          <div class="ch-banner-name">${ch.name}</div>
+        </div>
+        <span class="ch-banner-count" id="cnt-${ch.id}"></span>
+      </div>
+      <div class="cards-grid" id="grid-${ch.id}"></div>
+    `;
+    main.appendChild(block);
+
+    const grid = block.querySelector(`#grid-${ch.id}`);
+    ch.items.forEach((item, idx) => {
+      const card = document.createElement('div');
+      card.className = `card t-${item.t}`;
+      card.style.animationDelay = `${idx * 18}ms`;
+      card.dataset.type = item.t;
+      card.dataset.q = (item.title + ' ' + (item.stmt || '') + ' ' + item.n + ' ' + ch.name).toLowerCase();
+
+      const diag = item.diag && diagrams[item.diag]
+        ? `<div class="card-diagram">${diagrams[item.diag]}</div>` : '';
+
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="card-meta">
+            <span class="card-badge">${typeLabels[item.t]}</span>
+            <span class="card-num">${item.n}</span>
+          </div>
+          <span class="card-chevron">▾</span>
+        </div>
+        <div class="card-title">${item.title}</div>
+        <div class="card-preview">${item.preview}</div>
+        <div class="card-body">
+          <div class="card-stmt">${item.stmt || ''}</div>
+          ${diag}
+        </div>
+      `;
+      card.addEventListener('click', () => card.classList.toggle('open'));
+      grid.appendChild(card);
+    });
+  });
+  applyFilters();
+}
+
+/* ── FILTERS ── */
+function applyFilters() {
+  let total = 0;
+  chapters.forEach(ch => {
+    const block = document.getElementById(ch.id);
+    if (!block) return;
+    let vis = 0;
+    block.querySelectorAll('.card').forEach(c => {
+      const ok = (activeType === 'all' || c.dataset.type === activeType)
+               && (!searchQuery || c.dataset.q.includes(searchQuery));
+      c.classList.toggle('hidden', !ok);
+      if (ok) vis++;
+    });
+    total += vis;
+    block.classList.toggle('all-hidden', vis === 0);
+    const cnt = document.getElementById('cnt-' + ch.id);
+    if (cnt) cnt.textContent = vis ? vis + (vis === 1 ? ' item' : ' items') : '';
+  });
+  const empty = document.getElementById('empty');
+  if (empty) empty.classList.toggle('show', total === 0);
+  document.getElementById('result-count').textContent = total + ' result' + (total !== 1 ? 's' : '');
+}
+
+function setType(type, el) {
+  activeType = type;
+  document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  applyFilters();
+}
+
+document.getElementById('search').addEventListener('input', e => {
+  searchQuery = e.target.value.toLowerCase().trim();
+  applyFilters();
+});
+
+/* ── SIDEBAR ACTIVE ON SCROLL ── */
+const navMap = {};
+chapters.forEach(ch => navMap[ch.id] = document.getElementById('nav-' + ch.id));
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && navMap[e.target.id]) {
+      Object.values(navMap).forEach(el => el && el.classList.remove('active'));
+      navMap[e.target.id].classList.add('active');
+    }
+  });
+}, { rootMargin: '-60px 0px -60% 0px', threshold: 0 });
+
+buildBoard();
+chapters.forEach(ch => {
+  const el = document.getElementById(ch.id);
+  if (el) observer.observe(el);
+});
+</script>
+</body>
+</html>
